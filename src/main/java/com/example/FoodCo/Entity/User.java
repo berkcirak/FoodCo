@@ -1,14 +1,19 @@
 package com.example.FoodCo.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
 @Entity
-@
+@Table(name = "tbl_users")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -23,7 +28,11 @@ public class User implements UserDetails {
     private boolean accountNonLocked;
     private boolean isEnabled;
 
-    private Set<Role>
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    @JoinTable(name = "authorities",joinColumns = @JoinColumn(name = "user_id"))
+    @ElementCollection(targetClass = Role.class,fetch = FetchType.EAGER)
+    private Set<Role> authorities;
 
 
 }
