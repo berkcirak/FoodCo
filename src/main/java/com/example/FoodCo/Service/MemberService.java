@@ -1,25 +1,53 @@
 package com.example.FoodCo.Service;
 
 import com.example.FoodCo.Entity.Member;
+import com.example.FoodCo.Entity.Role;
 import com.example.FoodCo.Entity.User;
-import com.example.FoodCo.Exception.IdNotFoundException;
 import com.example.FoodCo.Repository.MemberRepository;
+import com.example.FoodCo.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MemberService {
 
-    private MemberRepository memberRepository;
-    public MemberService(MemberRepository memberRepository){
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    public MemberService(MemberRepository memberRepository,BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository){
         this.memberRepository=memberRepository;
+        this.bCryptPasswordEncoder=bCryptPasswordEncoder;
+        this.userRepository=userRepository;
     }
 
     public Member addMember(Member theMember){
-        return memberRepository.save(theMember);
+        User user=User.builder()
+                .username(theMember.getUser().getUsername())
+                .password(bCryptPasswordEncoder.encode(theMember.getUser().getPassword()))
+                .authorities(Collections.singleton(Role.ROLE_MEMBER))
+                .isEnabled(true)
+                .isCredentialsNonExpired(true)
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .build();
+        user=userRepository.save(user);
+
+        Member member=Member.builder()
+                .age(theMember.getAge())
+                .email(theMember.getEmail())
+                .firstName(theMember.getFirstName())
+                .lastName(theMember.getLastName())
+                .gender(theMember.getGender())
+                .registerDate(LocalDateTime.now())
+                .user(user)
+                .build();
+        return memberRepository.save(member);
     }
     public List<Member> getMembers(){
         return memberRepository.findAll();
@@ -36,19 +64,7 @@ public class MemberService {
             toMember.setEmail(theMember.getEmail());
             toMember.setFirstName(theMember.getFirstName());
             toMember.setLastName(theMember.getLastName());
-
-            User toUser=toMember.getUser();
-            User fromUser=theMember.getUser();
-            if(toUser != null && fromUser != null){
-                toUser.setEnabled(fromUser.isEnabled());
-                toUser.setUsername(fromUser.getUsername());
-                toUser.setPassword(fromUser.getPassword());
-                toUser.setAccountNonLocked(fromUser.isAccountNonLocked());
-                toUser.setAccountNonExpired(fromUser.isAccountNonExpired());
-                toUser.setCredentialsNonExpired(fromUser.isCredentialsNonExpired());
-                toUser.setAuthorities(fromUser.getAuthorities());
-                toMember.setUser(toUser);
-            }
+            toMember.setUser(theMember.getUser());
 
             memberRepository.save(toMember);
             return toMember;

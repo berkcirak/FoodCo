@@ -17,8 +17,8 @@ import java.util.Optional;
 @RequestMapping("/member")
 public class MemberController {
 
-    private MemberService memberService;
-    private MemberRepository memberRepository;
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     public MemberController(MemberService memberService,MemberRepository memberRepository){
         this.memberService=memberService;
         this.memberRepository=memberRepository;
@@ -40,6 +40,7 @@ public class MemberController {
     public Member updateMember(@PathVariable int memberId,@RequestBody Member member) throws IdNotFoundException {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         User user=(User) authentication.getPrincipal();
+
         Optional<Member> theMember=memberRepository.findMemberByUserId(user.getId());
 
         if (theMember.isPresent()){
@@ -76,7 +77,7 @@ public class MemberController {
             throw new IdNotFoundException("Member is not found");
         }
 
-        
+
     }
 
 
