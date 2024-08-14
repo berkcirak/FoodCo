@@ -1,8 +1,10 @@
 package com.example.FoodCo.Service;
 
+import com.example.FoodCo.Dto.MemberDTO;
 import com.example.FoodCo.Entity.Member;
 import com.example.FoodCo.Entity.Role;
 import com.example.FoodCo.Entity.User;
+import com.example.FoodCo.Exception.IdNotFoundException;
 import com.example.FoodCo.Repository.MemberRepository;
 import com.example.FoodCo.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -52,27 +54,52 @@ public class MemberService {
     public List<Member> getMembers(){
         return memberRepository.findAll();
     }
+    public Member getMemberById(int memberId)throws IdNotFoundException{
+        return memberRepository.findById(memberId).orElseThrow( () -> new IdNotFoundException("Id not found member: "+memberId));
+    }
     public Member getMember(int id){
         return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-    public Member updateMember(int id, Member theMember){
-        Optional<Member> optionalMember=memberRepository.findById(id);
-        if (optionalMember.isPresent()){
-            Member toMember=optionalMember.get();
-            toMember.setAge(theMember.getAge());
-            toMember.setGender(theMember.getGender());
-            toMember.setEmail(theMember.getEmail());
-            toMember.setFirstName(theMember.getFirstName());
-            toMember.setLastName(theMember.getLastName());
-            toMember.setUser(theMember.getUser());
+    public Member updateMember(int id, MemberDTO memberDTO) throws IdNotFoundException {
 
+        Member existingMember=memberRepository.findById(id).orElseThrow(()->new IdNotFoundException("member is not found"));
+        existingMember.setGender(memberDTO.getGender());
+        existingMember.setAge(memberDTO.getAge());
+        existingMember.setEmail(memberDTO.getEmail());
+        existingMember.setLastName(memberDTO.getLastName());
+        existingMember.setFirstName(memberDTO.getFirstName());
+
+        User user=existingMember.getUser();
+        user.setUsername(memberDTO.getUser().getUsername());
+        user.setPassword(bCryptPasswordEncoder.encode(memberDTO.getUser().getPassword()));
+        existingMember.setUser(user);
+        return memberRepository.save(existingMember);
+
+
+        /*Optional<Member> optionalMember = memberRepository.findById(id);
+
+        if (optionalMember.isPresent()) {
+            Member toMember = optionalMember.get();
+            User toUser = optionalMember.get().getUser();
+            toMember.setAge(memberDTO.getAge());
+            toMember.setGender(memberDTO.getGender());
+            toMember.setEmail(memberDTO.getEmail());
+            toMember.setFirstName(memberDTO.getFirstName());
+            toMember.setLastName(memberDTO.getLastName());
+
+
+            toUser.setUsername(optionalMember.get().getUser().getUsername());
+            toUser.setPassword(bCryptPasswordEncoder.encode(optionalMember.get().getUser().getPassword()));
+            toUser.setAuthorities(optionalMember.get().getUser().getAuthorities());
+            toMember.setUser(toUser);
             memberRepository.save(toMember);
             return toMember;
-        }else {
-            throw new EntityNotFoundException("Member not found with id: "+id);
-        }
+        } else {
+            throw new EntityNotFoundException("Member not found with id: " + id);
+        } */
     }
-    public void deleteMember(int id){
+    public void deleteMember(int id) throws IdNotFoundException {
+        Member member=memberRepository.findById(id).orElseThrow(()->new IdNotFoundException("Id not found member: "+id));
         memberRepository.deleteById(id);
     }
 

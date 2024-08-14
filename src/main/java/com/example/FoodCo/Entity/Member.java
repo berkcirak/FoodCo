@@ -24,11 +24,12 @@ public class Member {
     private String gender;
     private String email;
     private int age;
+    @Column(nullable = true)
     private LocalDateTime registerDate;
 
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 

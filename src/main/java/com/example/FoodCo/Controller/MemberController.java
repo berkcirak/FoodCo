@@ -1,5 +1,6 @@
 package com.example.FoodCo.Controller;
 
+import com.example.FoodCo.Dto.MemberDTO;
 import com.example.FoodCo.Entity.Member;
 import com.example.FoodCo.Entity.User;
 import com.example.FoodCo.Exception.IdNotFoundException;
@@ -7,7 +8,6 @@ import com.example.FoodCo.Repository.MemberRepository;
 import com.example.FoodCo.Service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,30 +37,32 @@ public class MemberController {
         return memberService.getMembers();
     }
     @PutMapping("/update/{memberId}")
-    public Member updateMember(@PathVariable int memberId,@RequestBody Member member) throws IdNotFoundException {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        User user=(User) authentication.getPrincipal();
+    public Member updateMember(@PathVariable int memberId, @RequestBody MemberDTO memberDTO) throws IdNotFoundException {
 
-        Optional<Member> theMember=memberRepository.findMemberByUserId(user.getId());
+        return memberService.updateMember(memberId,memberDTO);
+       /* Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
-        if (theMember.isPresent()){
-            Member existingMember=theMember.get();
-            if (existingMember.getId()==memberId){
-                member.setId(existingMember.getId());
-                return memberService.updateMember(memberId,member);
-            }else {
-                throw new RuntimeException("Member found but not updated");
+        Optional<Member> optionalMember = memberRepository.findMemberByUserId(user.getId());
+        if (optionalMember.isPresent()) {
+            Member existingMember = optionalMember.get();
+            if (existingMember.getId() == memberId) {
+                return memberService.updateMember(memberId, memberDTO);
+            } else {
+                throw new IdNotFoundException("Member found but not updated");
             }
-             }else{
-
+        } else {
             throw new IdNotFoundException("Member not found");
-
-        }
-
+        } */
     }
+
+
     @DeleteMapping("/delete/{memberId}")
     public void deleteMember(@PathVariable int memberId) throws IdNotFoundException {
-        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+
+        memberService.deleteMember(memberId);
+
+    /*    Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         User user=(User) authentication.getPrincipal();
         Optional<Member> theMember=memberRepository.findMemberByUserId(user.getId());
 
@@ -75,11 +77,10 @@ public class MemberController {
         }
         else {
             throw new IdNotFoundException("Member is not found");
-        }
+        } */
 
 
     }
-
 
 
 }
