@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_member")
@@ -24,14 +25,13 @@ public class Member {
     private String gender;
     private String email;
     private int age;
-    @Column(nullable = true)
     private LocalDateTime registerDate;
-
 
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
+
 
 
 }
