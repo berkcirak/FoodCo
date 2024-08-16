@@ -1,0 +1,9 @@
+.left-side{
+    height: max-content;
+    width: 25%;
+    background-color:bisque;    
+    display: flex;
+    flex-direction: column;
+
+}
+
