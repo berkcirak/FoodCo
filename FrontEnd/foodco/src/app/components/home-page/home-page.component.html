@@ -1,1 +1,10 @@
-<p>home-page works!</p>
+
+    <div *ngFor="let data of postList" class="container-post">
+      <div  class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ data.title }} {{ data.member.user.username }}</h5>
+          <p class="card-text">{{ data.description }}</p>
+          </div>
+        <img src="..." class="card-img-bottom" alt="...">
+      </div>
+    </div>

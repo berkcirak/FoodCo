@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { MatListModule } from '@angular/material/list';
+import { RouterOutlet, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatListModule],
+  imports: [CommonModule,RouterOutlet,RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
 export class AppComponent {
   title = 'foodco';
 }

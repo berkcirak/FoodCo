@@ -1,9 +1,27 @@
-.left-side{
-    height: max-content;
-    width: 25%;
-    background-color:bisque;    
-    display: flex;
-    flex-direction: column;
 
+.container{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    margin-left: 0;
+    margin-top: 0;
+}
+.left-side{
+    width: 20%;
+    background-color: azure;    
+}
+.nav-list{
+    margin-top: 120px;
+    padding: 20px;
+}
+.list-item{
+    width:max-content;
+    margin: 50px;
+}
+.list-item:hover{
+    cursor: pointer;
 }
 
+.router{
+    width: 80%;
+}
