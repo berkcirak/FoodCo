@@ -2,14 +2,14 @@
 .container{
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 100%;
     margin-left: 0;
     margin-top: 0;
 }
 .left-side{
     width: 20%;
     height: 100%;
-    background-color: azure;    
+    background-color: whitesmoke;    
 }
 .nav-list{
     margin-top: 120px;
