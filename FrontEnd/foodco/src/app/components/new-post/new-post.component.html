@@ -1,0 +1,26 @@
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <div>
+        <label for="title">Baslik:</label>
+        <input id="title" formControlName="title">
+    </div>
+
+    <div>
+        <label for="description">Aciklama</label>
+        <textarea id="description" formControlName="description"></textarea>
+    </div>
+
+    <div>
+        <label for="image">Resim Seç:</label>
+        <input id="image" type="file" (change)="onFileSelected($event)">
+    </div>
+
+    <div>
+        <label for="memberId">Uye id</label>
+        <input id="memberId" formControlName="memberId" type="number">
+    </div>
+
+    <button type="submit" [disabled]="postForm.invalid">Ekle</button>
+
+
+
+</form>>

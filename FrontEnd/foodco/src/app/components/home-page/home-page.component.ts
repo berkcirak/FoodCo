@@ -16,18 +16,22 @@ export class HomePageComponent implements OnInit {
   constructor(private configService: ConfigService) {}
 
   ngOnInit(): void {
-    this.getData();
+    this.getPosts();
   }
 
-  getData(): void {
+  getPosts(): void {
     // Observable veri tipi belirliyoruz
     this.configService.getAllData().subscribe({
       next: (data) => {
-        this.postList = data;
+        this.postList = data.map(post => ({
+          ...post,
+          image: `assets/img/${post.image}`
+        }));
       },
       error: (error) => {
         console.error('Error fetching data: ', error);
       }
     });
   }
+
 }

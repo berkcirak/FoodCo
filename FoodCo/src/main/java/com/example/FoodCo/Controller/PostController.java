@@ -6,7 +6,9 @@ import com.example.FoodCo.Exception.IdNotFoundException;
 import com.example.FoodCo.Repository.MemberRepository;
 import com.example.FoodCo.Service.MemberService;
 import com.example.FoodCo.Service.PostService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,8 +25,13 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    public Post addPost(@RequestBody PostDTO postDTO) throws IdNotFoundException{
-        return postService.addPost(postDTO);
+    public ResponseEntity<Post> addPost(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("memberId") int memberId,
+            @RequestParam("image")MultipartFile image) throws IdNotFoundException{
+        Post post=postService.addPost(title, description, memberId, image);
+        return ResponseEntity.ok(post);
     }
 
     @GetMapping("/list")

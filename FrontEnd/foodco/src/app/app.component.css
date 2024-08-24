@@ -8,6 +8,7 @@
 }
 .left-side{
     width: 20%;
+    height: 100%;
     background-color: azure;    
 }
 .nav-list{
@@ -24,4 +25,5 @@
 
 .router{
     width: 80%;
+    height: 100%;
 }
