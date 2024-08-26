@@ -6,7 +6,7 @@ import { PostDTO } from '../models/postdto';
   providedIn: 'root'
 })
 export class ConfigService {
-
+  
   private apiUrl='http://localhost:8080/post';
 
 
@@ -20,8 +20,6 @@ export class ConfigService {
   addPost(post: PostDTO): Observable<PostDTO>{
     return this.http.post<PostDTO>(`${this.apiUrl}/add`,post);
   }
-
-
 
 
 }

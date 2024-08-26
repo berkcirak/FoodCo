@@ -1,10 +1,8 @@
 package com.example.FoodCo.Controller;
 
-import com.example.FoodCo.Dto.PostDTO;
 import com.example.FoodCo.Entity.Post;
 import com.example.FoodCo.Exception.IdNotFoundException;
 import com.example.FoodCo.Repository.MemberRepository;
-import com.example.FoodCo.Service.MemberService;
 import com.example.FoodCo.Service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,15 +22,17 @@ public class PostController {
         this.memberRepository=memberRepository;
     }
 
+
     @PostMapping("/add")
     public ResponseEntity<Post> addPost(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("memberId") int memberId,
-            @RequestParam("image")MultipartFile image) throws IdNotFoundException{
+            @RequestParam("image")MultipartFile image) throws IdNotFoundException {
         Post post=postService.addPost(title, description, memberId, image);
         return ResponseEntity.ok(post);
     }
+
 
     @GetMapping("/list")
     public List<Post> getPosts(){

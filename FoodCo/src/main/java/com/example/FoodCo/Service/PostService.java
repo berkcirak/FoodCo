@@ -43,7 +43,6 @@ public class PostService {
                 .image(imageName)
                 .build();
         return postRepository.save(post);
-
     }
 
     public Post updatePost(int id, Post post)throws IdNotFoundException{
@@ -63,14 +62,4 @@ public class PostService {
     public void deletePost(int id){
         postRepository.deleteById(id);
     }
-
-
-
-
-
-
-
-
-
-
 }

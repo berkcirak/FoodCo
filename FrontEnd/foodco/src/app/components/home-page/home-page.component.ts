@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../../services/config-service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs'; // rxjs'i import edin
-
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule
+  ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
 })

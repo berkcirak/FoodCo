@@ -1,11 +1,12 @@
 <div class="page">
-    <div *ngFor="let data of postList" class="container-post">
-      <div  class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ data.title }} {{ data.member.user.username }}</h5>
-          <p class="card-text">{{ data.description }}</p>
-          </div>
-          <img [src]="data.image" class="card-image" alt="...">
+  <div *ngFor="let data of postList" class="container-post">
+    <div class="card">
+      <img [src]="data.image" class="card-image" alt="Post image">
+      <div class="card-body">
+        <h5 class="card-title">{{ data.title }}</h5>
+        <h6 class="card-user">{{ data.member.user.username }}</h6>
+        <p class="card-text">{{ data.description }}</p>
       </div>
     </div>
+  </div>
 </div>

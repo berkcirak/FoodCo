@@ -22,8 +22,13 @@
 .list-item:hover{
     cursor: pointer;
 }
-
+.divider {
+    width: 2px;
+    background-color: #dee2e6;
+    margin: 0 15px;
+  }
 .router{
     width: 80%;
     height: 100%;
+    background-color: whitesmoke;
 }
