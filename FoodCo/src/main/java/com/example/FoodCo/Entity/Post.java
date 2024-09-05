@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "tbl_post")
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class Post {
     @Lob
     private String description;
     private String image;
-
+    private LocalDateTime createdTime;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;

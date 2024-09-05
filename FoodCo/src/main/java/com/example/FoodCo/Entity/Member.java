@@ -26,11 +26,9 @@ public class Member {
     private String email;
     private int age;
     private LocalDateTime registerDate;
+    private String username;
+    private String password;
 
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User user;
 
 
 

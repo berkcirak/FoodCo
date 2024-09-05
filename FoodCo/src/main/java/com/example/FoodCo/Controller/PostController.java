@@ -4,9 +4,8 @@ import com.example.FoodCo.Entity.Post;
 import com.example.FoodCo.Exception.IdNotFoundException;
 import com.example.FoodCo.Repository.MemberRepository;
 import com.example.FoodCo.Service.PostService;
-import org.springframework.http.ResponseEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,13 +23,8 @@ public class PostController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<Post> addPost(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("memberId") int memberId,
-            @RequestParam("image")MultipartFile image) throws IdNotFoundException {
-        Post post=postService.addPost(title, description, memberId, image);
-        return ResponseEntity.ok(post);
+    public Post addPost(@RequestBody Post post) throws EntityNotFoundException {
+        return postService.addPost(post);
     }
 
 

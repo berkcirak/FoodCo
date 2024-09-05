@@ -3,13 +3,12 @@ package com.example.FoodCo.Repository;
 import com.example.FoodCo.Entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.example.FoodCo.Entity.User;
+
 import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
+    Member findByUsername(String username);
 
-    Optional<Member> findByUser_Username(String username);
-    Optional<Member> findMemberByUserId(int userId);
 }

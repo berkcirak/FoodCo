@@ -7,8 +7,6 @@ public class MemberDTO {
     private int age;
     private String gender;
     private String email;
-    private UserDTO user;
-
 
     public String getFirstName() {
         return firstName;
@@ -50,11 +48,5 @@ public class MemberDTO {
         this.email = email;
     }
 
-    public UserDTO getUser() {
-        return user;
-    }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
-    }
 }

@@ -6,9 +6,11 @@ import com.example.FoodCo.Entity.Post;
 import com.example.FoodCo.Exception.IdNotFoundException;
 import com.example.FoodCo.Repository.MemberRepository;
 import com.example.FoodCo.Repository.PostRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +20,7 @@ public class PostService {
     private PostRepository postRepository;
     private MemberService memberService;
     private MemberRepository memberRepository;
+
     public PostService(PostRepository postRepository,MemberService memberService, MemberRepository memberRepository){
         this.postRepository=postRepository;
         this.memberService=memberService;
@@ -32,17 +35,12 @@ public class PostService {
         return postRepository.findById(id).orElseThrow(()->new IdNotFoundException("Post is not found"));
     }
 
-    public Post addPost(String title, String description, int memberId, MultipartFile image)throws IdNotFoundException{
-        String imageName=image.getOriginalFilename();
-
-        Member member=memberRepository.findById(memberId).orElseThrow(() -> new IdNotFoundException("Member not found"));
-        Post post=Post.builder()
-                .title(title)
-                .description(description)
-                .member(member)
-                .image(imageName)
-                .build();
+    public Post addPost(Post post) throws EntityNotFoundException {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        post.setMember(authenticatedMember);
+        post.setCreatedTime(LocalDateTime.now());
         return postRepository.save(post);
+
     }
 
     public Post updatePost(int id, Post post)throws IdNotFoundException{

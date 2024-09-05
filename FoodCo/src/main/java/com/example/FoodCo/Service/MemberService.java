@@ -2,53 +2,40 @@ package com.example.FoodCo.Service;
 
 import com.example.FoodCo.Dto.MemberDTO;
 import com.example.FoodCo.Entity.Member;
-import com.example.FoodCo.Entity.Role;
-import com.example.FoodCo.Entity.User;
 import com.example.FoodCo.Exception.IdNotFoundException;
 import com.example.FoodCo.Repository.MemberRepository;
-import com.example.FoodCo.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserRepository userRepository;
-    public MemberService(MemberRepository memberRepository,BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository){
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private AuthenticationManager authenticationManager;
+    private JWTService jwtService;
+
+    public MemberService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationManager authenticationManager, JWTService jwtService){
         this.memberRepository=memberRepository;
         this.bCryptPasswordEncoder=bCryptPasswordEncoder;
-        this.userRepository=userRepository;
+        this.jwtService=jwtService;
+        this.authenticationManager=authenticationManager;
     }
 
     public Member addMember(Member theMember){
-        User user=User.builder()
-                .username(theMember.getUser().getUsername())
-                .password(bCryptPasswordEncoder.encode(theMember.getUser().getPassword()))
-                .authorities(Collections.singleton(Role.ROLE_MEMBER))
-                .isEnabled(true)
-                .isCredentialsNonExpired(true)
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .build();
-        user=userRepository.save(user);
-
-        Member member=Member.builder()
-                .age(theMember.getAge())
-                .email(theMember.getEmail())
-                .firstName(theMember.getFirstName())
-                .lastName(theMember.getLastName())
-                .gender(theMember.getGender())
-                .registerDate(LocalDateTime.now())
-                .user(user)
-                .build();
-        return memberRepository.save(member);
+        theMember.setRegisterDate(LocalDateTime.now());
+        theMember.setPassword(bCryptPasswordEncoder.encode(theMember.getPassword()));
+        return memberRepository.save(theMember);
     }
     public List<Member> getMembers(){
         return memberRepository.findAll();
@@ -60,46 +47,38 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
     public Member updateMember(int id, MemberDTO memberDTO) throws IdNotFoundException {
-
+        //düzenlenecek
         Member existingMember=memberRepository.findById(id).orElseThrow(()->new IdNotFoundException("member is not found"));
         existingMember.setGender(memberDTO.getGender());
         existingMember.setAge(memberDTO.getAge());
         existingMember.setEmail(memberDTO.getEmail());
         existingMember.setLastName(memberDTO.getLastName());
         existingMember.setFirstName(memberDTO.getFirstName());
-
-        User user=existingMember.getUser();
-        user.setUsername(memberDTO.getUser().getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(memberDTO.getUser().getPassword()));
-        existingMember.setUser(user);
         return memberRepository.save(existingMember);
 
-
-        /*Optional<Member> optionalMember = memberRepository.findById(id);
-
-        if (optionalMember.isPresent()) {
-            Member toMember = optionalMember.get();
-            User toUser = optionalMember.get().getUser();
-            toMember.setAge(memberDTO.getAge());
-            toMember.setGender(memberDTO.getGender());
-            toMember.setEmail(memberDTO.getEmail());
-            toMember.setFirstName(memberDTO.getFirstName());
-            toMember.setLastName(memberDTO.getLastName());
-
-
-            toUser.setUsername(optionalMember.get().getUser().getUsername());
-            toUser.setPassword(bCryptPasswordEncoder.encode(optionalMember.get().getUser().getPassword()));
-            toUser.setAuthorities(optionalMember.get().getUser().getAuthorities());
-            toMember.setUser(toUser);
-            memberRepository.save(toMember);
-            return toMember;
-        } else {
-            throw new EntityNotFoundException("Member not found with id: " + id);
-        } */
     }
     public void deleteMember(int id) throws IdNotFoundException {
+        //düzenlenecek
         Member member=memberRepository.findById(id).orElseThrow(()->new IdNotFoundException("Id not found member: "+id));
         memberRepository.deleteById(id);
+    }
+    // login for security
+    public String verify(Member member){
+        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(member.getUsername(), member.getPassword()));
+        if (authentication.isAuthenticated()){
+            return jwtService.generateToken(member.getUsername());
+        }
+        return "fail";
+    }
+    public Member getAuthenticatedMember() throws UsernameNotFoundException {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails){
+            username=((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        return memberRepository.findByUsername(username);
     }
 
 }
