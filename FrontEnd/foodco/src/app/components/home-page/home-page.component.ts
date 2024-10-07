@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../../services/config-service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs'; // rxjs'i import edin
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-home-page',
   standalone: true,
@@ -13,13 +14,14 @@ import { Observable } from 'rxjs'; // rxjs'i import edin
 export class HomePageComponent implements OnInit {
   postList: any[] = [];
 
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService, http: HttpClient) {}
 
   ngOnInit(): void {
     this.getPosts();
   }
 
   getPosts(): void {
+    debugger;
     // Observable veri tipi belirliyoruz
     this.configService.getAllData().subscribe({
       next: (data) => {

@@ -7,6 +7,15 @@ public class PostDTO {
     private String title;
     private String description;
     private String image;
+    private int memberId;
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
+    }
 
     public String getTitle() {
         return title;

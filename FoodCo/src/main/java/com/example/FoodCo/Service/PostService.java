@@ -1,6 +1,5 @@
 package com.example.FoodCo.Service;
 
-import com.example.FoodCo.Dto.PostDTO;
 import com.example.FoodCo.Entity.Member;
 import com.example.FoodCo.Entity.Post;
 import com.example.FoodCo.Exception.IdNotFoundException;
@@ -8,8 +7,6 @@ import com.example.FoodCo.Repository.MemberRepository;
 import com.example.FoodCo.Repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

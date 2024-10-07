@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="left-side">
+      <div class="nav-list">
+        <div class="list-item" [routerLink]="['/mainpage/homepage']">Ana Sayfa</div>
+        <div class="list-item" [routerLink]="['/mainpage/search']">Ara</div>
+        <div class="list-item" [routerLink]="['/mainpage/new-post']">Yeni Gönderi</div>
+        <div class="list-item">Mesajlar</div>
+        <div class="list-item">Profil</div>
+      </div>
+    </div>
+  
+    <!-- Divider -->
+    <div class="divider"></div>
+  
+    <div class="router">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  

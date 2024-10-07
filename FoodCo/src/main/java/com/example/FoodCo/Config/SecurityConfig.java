@@ -31,7 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(customizer -> customizer.disable()); //csrf devre dısı
         http.authorizeHttpRequests(request -> request
-                .requestMatchers("member/register","member/login","member/list").permitAll()
+                .requestMatchers("member/register","member/login","post/list","post/add").permitAll()
                 .anyRequest().authenticated());//tüm istekleri authenticate eder
         http.httpBasic(Customizer.withDefaults());//postman web goruntusunu getirir
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

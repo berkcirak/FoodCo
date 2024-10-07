@@ -4,7 +4,7 @@
       <img [src]="data.image" class="card-image" alt="Post image">
       <div class="card-body">
         <h5 class="card-title">{{ data.title }}</h5>
-        <h6 class="card-user">{{ data.member.user.username }}</h6>
+        <h6 class="card-user">{{ data.member?.username }}</h6>
         <p class="card-text">{{ data.description }}</p>
       </div>
     </div>

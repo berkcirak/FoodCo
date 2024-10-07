@@ -1,18 +1,10 @@
 <div class="container">
-  <div class="left-side">
-    <div class="nav-list">
-      <div class="list-item" [routerLink]="['/']">Ana Sayfa</div>
-      <div class="list-item" [routerLink]="['/search']">Ara</div>
-      <div class="list-item" [routerLink]="['/new-post']">Yeni Gönderi</div>
-      <div class="list-item">Mesajlar</div>
-      <div class="list-item">Profil</div>
+  
+    <app-login-page *ngIf="showLoginPage" (loginSuccess)="onLoginSuccess()">
+    </app-login-page>
+  
+    <div class="router">
+      <router-outlet></router-outlet>
     </div>
   </div>
-
-  <!-- Divider -->
-  <div class="divider"></div>
-
-  <div class="router">
-    <router-outlet></router-outlet>
-  </div>
-</div>
+  
